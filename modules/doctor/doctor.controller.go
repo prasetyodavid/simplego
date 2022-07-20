@@ -22,18 +22,31 @@ type Specialization struct {
 }
 
 func Store_doctor(w http.ResponseWriter, r *http.Request) {
+	/*ONLY POST METHOD ALLOWED*/
+	if r.Method == "POST" {
+		reqBody, _ := ioutil.ReadAll(r.Body)
+		var doctor Doctor
+		var doctors []Doctor
+		json.Unmarshal(reqBody, &doctor)
+		doctors = append(doctors, doctor)
 
-	reqBody, _ := ioutil.ReadAll(r.Body)
-	var doctor Doctor
-	var doctors []Doctor
-	json.Unmarshal(reqBody, &doctor)
-	doctors = append(doctors, doctor)
+		/*age validation*/
+		if doctor.Age < 21 {
+			response := make(map[string]string)
+			response["message"] = "Invalid Age"
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(response)
+			return
+		}
 
-	if StoreDoctor(doctors) != nil { // method create doctor
-		w.WriteHeader(http.StatusBadRequest)
+		if StoreDoctor(doctors) != nil { // method for create doctor
+			w.WriteHeader(http.StatusBadRequest)
+		} else {
+			w.WriteHeader(http.StatusOK)
+			json.NewEncoder(w).Encode(doctors)
+		}
 	} else {
-		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(doctors)
+		w.WriteHeader(http.StatusForbidden)
 	}
 
 }
