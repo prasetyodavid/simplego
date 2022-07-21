@@ -30,8 +30,5 @@ func DeleteAll() error {
 	if err := config.DB.Exec("DELETE FROM specializations").Error; err != nil {
 		return err
 	}
-	if err := config.DB.Exec("DELETE FROM users").Error; err != nil {
-		return err
-	}
 	return nil
 }
