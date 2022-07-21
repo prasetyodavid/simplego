@@ -6,21 +6,6 @@ import (
 	"net/http"
 )
 
-type Doctor struct {
-	ID              int64            `sql:"auto_increment" json:"-"`
-	Name            string           `json:"name"`
-	Age             int64            `json:"age"`
-	Specializations []Specialization `json:"specializations"`
-}
-
-type Specialization struct {
-	ID          int64  `sql:"auto_increment" json:"-"`
-	Number      int64  `json:"number"`
-	Doctor      Doctor `gorm:"foreignkey:doctor_id" json:"-"`
-	DoctorID    int64  `json:"doctor_id"`
-	Description string `json:"description"`
-}
-
 func Store_doctor(w http.ResponseWriter, r *http.Request) {
 	/*ONLY POST METHOD ALLOWED*/
 	if r.Method == "POST" {
@@ -42,7 +27,7 @@ func Store_doctor(w http.ResponseWriter, r *http.Request) {
 		if StoreDoctor(doctors) != nil { // method for create doctor
 			w.WriteHeader(http.StatusBadRequest)
 		} else {
-			w.WriteHeader(http.StatusOK)
+			w.WriteHeader(http.StatusCreated)
 			json.NewEncoder(w).Encode(doctors)
 		}
 	} else {

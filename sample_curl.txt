@@ -1,0 +1,18 @@
+curl --request POST \
+  --url http://localhost:8080/store_doctor \
+  --header 'Content-Type: application/json' \
+  --data '{
+	"name":"dr. Inne Irawati Sp. KJ",
+	"age": 28,
+	"specializations": [{
+		"number":1,
+		"description": "Spesialis Psikiatri"
+	},
+		{"number":2,
+		"description": "Psikiater"
+	}]
+}'
+
+
+curl --request GET \
+  --url http://localhost:8080/get_doctor
